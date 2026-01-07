@@ -1,0 +1,97 @@
+﻿@model EPS.Application.DTOs.MarkAttendanceDto
+
+@{
+    ViewData["Title"] = "Mark Attendance";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2>Mark Attendance</h2>
+            <p class="text-muted">Record employee attendance</p>
+        </div>
+        <div class="col-md-6 text-end">
+            <a asp-action="Index" class="btn btn-secondary">
+                <i class="bi bi-arrow-left me-2"></i>Back to List
+            </a>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <form asp-action="Mark" method="post">
+                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label asp-for="EmployeeId" class="form-label"></label>
+                        <select asp-for="EmployeeId" class="form-select">
+                            <option value="">Select Employee</option>
+                            @foreach (var emp in ViewBag.Employees as IEnumerable<EPS.Application.DTOs.EmployeeDto>)
+                            {
+                                <option value="@emp.Id">@emp.FullName - @emp.EmployeeId</option>
+                            }
+                        </select>
+                        <span asp-validation-for="EmployeeId" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label asp-for="Date" class="form-label"></label>
+                        <input asp-for="Date" class="form-control" type="date" />
+                        <span asp-validation-for="Date" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="CheckInTime" class="form-label"></label>
+                        <input asp-for="CheckInTime" class="form-control" type="time" />
+                        <span asp-validation-for="CheckInTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="CheckOutTime" class="form-label"></label>
+                        <input asp-for="CheckOutTime" class="form-control" type="time" />
+                        <span asp-validation-for="CheckOutTime" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label asp-for="Status" class="form-label"></label>
+                        <select asp-for="Status" class="form-select">
+                            @foreach (var status in ViewBag.Statuses as Array)
+                            {
+                                <option value="@status">@status</option>
+                            }
+                        </select>
+                        <span asp-validation-for="Status" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12">
+                        <label asp-for="Remarks" class="form-label"></label>
+                        <textarea asp-for="Remarks" class="form-control" rows="3" placeholder="Optional remarks..."></textarea>
+                        <span asp-validation-for="Remarks" class="text-danger"></span>
+                    </div>
+
+                    <div class="col-md-12 text-end">
+                        <a asp-action="Index" class="btn btn-secondary me-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle me-2"></i>Mark Attendance
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Set default date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            var dateInput = document.querySelector('input[type="date"]');
+            if (!dateInput.value) {
+                var today = new Date().toISOString().split('T')[0];
+                dateInput.value = today;
+            }
+        });
+    </script>
+}

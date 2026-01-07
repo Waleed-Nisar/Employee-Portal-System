@@ -1,0 +1,114 @@
+﻿@model IEnumerable<EPS.Application.DTOs.AttendanceDto>
+
+@{
+    ViewData["Title"] = "Attendance";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2>Attendance Records</h2>
+            <p class="text-muted">View and manage attendance</p>
+        </div>
+        <div class="col-md-6 text-end">
+            <a asp-action="Mark" class="btn btn-primary">
+                <i class="bi bi-clock-history me-2"></i>Mark Attendance
+            </a>
+        </div>
+    </div>
+
+    <!-- Filters -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Employee</label>
+                    <select name="employeeId" class="form-select">
+                        <option value="">Select Employee</option>
+                        @foreach (var emp in ViewBag.Employees as IEnumerable<EPS.Application.DTOs.EmployeeDto>)
+                        {
+                            <option value="@emp.Id" selected="@(ViewBag.SelectedEmployeeId == emp.Id)">@emp.FullName</option>
+                        }
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">Start Date</label>
+                    <input type="date" name="startDate" value="@ViewBag.StartDate?.ToString("yyyy-MM-dd")" class="form-control" />
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">End Date</label>
+                    <input type="date" name="endDate" value="@ViewBag.EndDate?.ToString("yyyy-MM-dd")" class="form-control" />
+                </div>
+                <div class="col-md-2 d-flex align-items-end">
+                    <button type="submit" class="btn btn-primary w-100">
+                        <i class="bi bi-search me-2"></i>Search
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Attendance List -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Employee</th>
+                            <th>Check In</th>
+                            <th>Check Out</th>
+                            <th>Working Hours</th>
+                            <th>Status</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            @foreach (var attendance in Model)
+                            {
+                                <tr>
+                                    <td>@attendance.Date.ToString("MMM dd, yyyy")</td>
+                                    <td>@attendance.EmployeeName</td>
+                                    <td>@(attendance.CheckInTime?.ToString("hh:mm tt") ?? "N/A")</td>
+                                    <td>@(attendance.CheckOutTime?.ToString("hh:mm tt") ?? "N/A")</td>
+                                    <td>@(attendance.WorkingHours?.ToString("F2") ?? "N/A") hrs</td>
+                                    <td>
+                                        @if (attendance.Status == EPS.Domain.Enums.AttendanceStatus.Present)
+                                        {
+                                            <span class="badge bg-success">Present</span>
+                                        }
+                                        else if (attendance.Status == EPS.Domain.Enums.AttendanceStatus.Absent)
+                                        {
+                                            <span class="badge bg-danger">Absent</span>
+                                        }
+                                        else if (attendance.Status == EPS.Domain.Enums.AttendanceStatus.Late)
+                                        {
+                                            <span class="badge bg-warning">Late</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@attendance.StatusDisplay</span>
+                                        }
+                                    </td>
+                                    <td>@(attendance.Remarks ?? "N/A")</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="7" class="text-center text-muted py-4">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                    No attendance records found. Please select an employee.
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

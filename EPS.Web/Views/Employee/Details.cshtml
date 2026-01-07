@@ -1,0 +1,171 @@
+﻿@model EPS.Application.DTOs.EmployeeDto
+
+@{
+    ViewData["Title"] = "Employee Details";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2>Employee Details</h2>
+            <p class="text-muted">@Model.EmployeeId</p>
+        </div>
+        <div class="col-md-6 text-end">
+            <a asp-action="Index" class="btn btn-secondary me-2">
+                <i class="bi bi-arrow-left me-2"></i>Back to List
+            </a>
+            @if (User.IsInRole("Admin") || User.IsInRole("HR Manager"))
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning me-2">
+                    <i class="bi bi-pencil me-2"></i>Edit
+                </a>
+            }
+            @if (User.IsInRole("Admin"))
+            {
+                <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this employee?');">
+                    <button type="submit" class="btn btn-danger">
+                        <i class="bi bi-trash me-2"></i>Delete
+                    </button>
+                </form>
+            }
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Personal Information -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="bi bi-person me-2"></i>Personal Information</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="40%">Full Name:</th>
+                            <td>@Model.FullName</td>
+                        </tr>
+                        <tr>
+                            <th>Email:</th>
+                            <td>@Model.Email</td>
+                        </tr>
+                        <tr>
+                            <th>Phone:</th>
+                            <td>@(Model.Phone ?? "N/A")</td>
+                        </tr>
+                        <tr>
+                            <th>Date of Birth:</th>
+                            <td>@Model.DateOfBirth.ToString("MMM dd, yyyy")</td>
+                        </tr>
+                        <tr>
+                            <th>Gender:</th>
+                            <td>@(Model.Gender ?? "N/A")</td>
+                        </tr>
+                        <tr>
+                            <th>Address:</th>
+                            <td>
+                                @if (!string.IsNullOrEmpty(Model.Address))
+                                {
+                                @Model.Address<br />
+                                @($"{Model.City}, {Model.State} {Model.ZipCode}")<br />
+                                @Model.Country
+                                }                        
+                                else
+                                {
+                                    <span class="text-muted">N/A</span>
+                                }
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Employment Information -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0"><i class="bi bi-briefcase me-2"></i>Employment Information</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="40%">Department:</th>
+                            <td>@Model.DepartmentName</td>
+                        </tr>
+                        <tr>
+                            <th>Designation:</th>
+                            <td>@Model.DesignationTitle</td>
+                        </tr>
+                        <tr>
+                            <th>Manager:</th>
+                            <td>@(Model.ManagerName ?? "N/A")</td>
+                        </tr>
+                        <tr>
+                            <th>Hire Date:</th>
+                            <td>@Model.HireDate.ToString("MMM dd, yyyy")</td>
+                        </tr>
+                        <tr>
+                            <th>Status:</th>
+                            <td>
+                                @if (Model.Status == EPS.Domain.Enums.EmployeeStatus.Active)
+                                {
+                                    <span class="badge bg-success">@Model.StatusDisplay</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">@Model.StatusDisplay</span>
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Salary:</th>
+                            <td>$@Model.Salary.ToString("N2")</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emergency Contact -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0"><i class="bi bi-telephone me-2"></i>Emergency Contact</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="40%">Contact Name:</th>
+                            <td>@(Model.EmergencyContactName ?? "N/A")</td>
+                        </tr>
+                        <tr>
+                            <th>Contact Phone:</th>
+                            <td>@(Model.EmergencyContactPhone ?? "N/A")</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Information -->
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="bi bi-info-circle me-2"></i>System Information</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-borderless">
+                        <tr>
+                            <th width="40%">Created At:</th>
+                            <td>@Model.CreatedAt.ToString("MMM dd, yyyy hh:mm tt")</td>
+                        </tr>
+                        <tr>
+                            <th>Last Updated:</th>
+                            <td>@Model.UpdatedAt.ToString("MMM dd, yyyy hh:mm tt")</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

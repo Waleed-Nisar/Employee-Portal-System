@@ -1,0 +1,127 @@
+﻿@model IEnumerable<EPS.Application.DTOs.LeaveDto>
+
+@{
+    ViewData["Title"] = "Leaves";
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <h2>Leave Management</h2>
+            <p class="text-muted">View and manage leave requests</p>
+        </div>
+    </div>
+
+    <!-- Filter -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <form method="get" class="row g-3">
+                <div class="col-md-4">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select" onchange="this.form.submit()">
+                        <option value="">All Statuses</option>
+                        @foreach (var status in ViewBag.Statuses as Array)
+                        {
+                            <option value="@status" selected="@(ViewBag.SelectedStatus?.ToString() == status.ToString())">@status</option>
+                        }
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Leave List -->
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Employee</th>
+                            <th>Leave Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Days</th>
+                            <th>Status</th>
+                            <th>Approved By</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Any())
+                        {
+                            @foreach (var leave in Model)
+                            {
+                                <tr>
+                                    <td>
+                                        <strong>@leave.EmployeeName</strong><br />
+                                        <small class="text-muted">@leave.EmployeeEmail</small>
+                                    </td>
+                                    <td><span class="badge bg-info">@leave.LeaveTypeDisplay</span></td>
+                                    <td>@leave.StartDate.ToString("MMM dd, yyyy")</td>
+                                    <td>@leave.EndDate.ToString("MMM dd, yyyy")</td>
+                                    <td>@leave.TotalDays</td>
+                                    <td>
+                                        @if (leave.Status == EPS.Domain.Enums.LeaveStatus.Pending)
+                                        {
+                                            <span class="badge bg-warning">Pending</span>
+                                        }
+                                        else if (leave.Status == EPS.Domain.Enums.LeaveStatus.Approved)
+                                        {
+                                            <span class="badge bg-success">Approved</span>
+                                        }
+                                        else if (leave.Status == EPS.Domain.Enums.LeaveStatus.Rejected)
+                                        {
+                                            <span class="badge bg-danger">Rejected</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="badge bg-secondary">@leave.StatusDisplay</span>
+                                        }
+                                    </td>
+                                    <td>@(leave.ApproverName ?? "N/A")</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#leaveModal-@leave.Id">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="leaveModal-@leave.Id" tabindex="-1">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title">Leave Details</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p><strong>Employee:</strong> @leave.EmployeeName</p>
+                                                <p><strong>Type:</strong> @leave.LeaveTypeDisplay</p>
+                                                <p><strong>Duration:</strong> @leave.StartDate.ToString("MMM dd") - @leave.EndDate.ToString("MMM dd, yyyy") (@leave.TotalDays days)</p>
+                                                <p><strong>Reason:</strong> @leave.Reason</p>
+                                                @if (!string.IsNullOrEmpty(leave.ApprovalRemarks))
+                                                {
+                                                    <p><strong>Remarks:</strong> @leave.ApprovalRemarks</p>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="8" class="text-center text-muted py-4">
+                                    <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+                                    No leave requests found
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,147 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+    var stats = ViewBag.Statistics;
+}
+
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="mb-0">Dashboard</h2>
+            <p class="text-muted">Welcome to Employee Portal System</p>
+        </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="stat-card blue">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">@stats.TotalEmployees</h3>
+                        <p class="mb-0">Total Employees</p>
+                    </div>
+                    <i class="bi bi-people fs-1"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card green">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">@stats.ActiveEmployees</h3>
+                        <p class="mb-0">Active Employees</p>
+                    </div>
+                    <i class="bi bi-person-check fs-1"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card orange">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">@stats.TotalDepartments</h3>
+                        <p class="mb-0">Departments</p>
+                    </div>
+                    <i class="bi bi-diagram-3 fs-1"></i>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card red">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h3 class="mb-0">@stats.PendingLeaves</h3>
+                        <p class="mb-0">Pending Leaves</p>
+                    </div>
+                    <i class="bi bi-hourglass-split fs-1"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="row mt-4">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header bg-white">
+                    <h5 class="mb-0">Quick Actions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row g-3">
+                        @if (User.IsInRole("Admin") || User.IsInRole("HR Manager"))
+                        {
+                            <div class="col-md-3">
+                                <a asp-controller="Employee" asp-action="Create" class="btn btn-primary w-100 py-3">
+                                    <i class="bi bi-person-plus fs-4 d-block mb-2"></i>
+                                    Add Employee
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a asp-controller="Department" asp-action="Create" class="btn btn-success w-100 py-3">
+                                    <i class="bi bi-plus-circle fs-4 d-block mb-2"></i>
+                                    Add Department
+                                </a>
+                            </div>
+                        }
+                        @if (User.IsInRole("Admin") || User.IsInRole("HR Manager") || User.IsInRole("Manager"))
+                        {
+                            <div class="col-md-3">
+                                <a asp-controller="Attendance" asp-action="Mark" class="btn btn-info w-100 py-3">
+                                    <i class="bi bi-clock-history fs-4 d-block mb-2"></i>
+                                    Mark Attendance
+                                </a>
+                            </div>
+                            <div class="col-md-3">
+                                <a asp-controller="Leave" asp-action="Pending" class="btn btn-warning w-100 py-3">
+                                    <i class="bi bi-check-square fs-4 d-block mb-2"></i>
+                                    Approve Leaves
+                                </a>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="row mt-4">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Recent Employees</h5>
+                    <a asp-controller="Employee" asp-action="Index" class="btn btn-sm btn-outline-primary">View All</a>
+                </div>
+                <div class="card-body">
+                    <p class="text-muted text-center py-4">
+                        <i class="bi bi-info-circle me-2"></i>
+                        Navigate to Employees section to view all records
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">System Information</h5>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><i class="bi bi-shield-check text-success me-2"></i>System Status</span>
+                            <span class="badge bg-success">Online</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><i class="bi bi-calendar-event text-primary me-2"></i>Last Backup</span>
+                            <span class="text-muted">@DateTime.Now.ToString("MMM dd, yyyy")</span>
+                        </li>
+                        <li class="list-group-item d-flex justify-content-between">
+                            <span><i class="bi bi-people text-info me-2"></i>Your Role</span>
+                            <span class="badge bg-info">@(User.IsInRole("Admin") ? "Admin" : User.IsInRole("HR Manager") ? "HR Manager" : User.IsInRole("Manager") ? "Manager" : "Employee")</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
