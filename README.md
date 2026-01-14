@@ -234,5 +234,28 @@ EmployeePortalSystem/
 - **AspNetRoles** - System roles
 
 
+## Screenshots
+
+### Dashboard
+<img width="1915" height="920" alt="Screenshot 2026-01-14 085939" src="https://github.com/user-attachments/assets/c27d2b6a-f10c-46b1-9c2f-057e97e8af20" />
+
+### Employees
+<img width="1919" height="868" alt="Screenshot 2026-01-14 090000" src="https://github.com/user-attachments/assets/f0df1cb5-9926-4589-add1-207d3e2f283e" />
+
+### Departments
+<img width="1919" height="845" alt="Screenshot 2026-01-14 090017" src="https://github.com/user-attachments/assets/5ec24657-4ebe-454a-b2da-835061306fce" />
+
+### Leave Management
+<img width="1908" height="786" alt="Screenshot 2026-01-14 090032" src="https://github.com/user-attachments/assets/cc9fd6e6-5a72-4374-8870-a01a41aa4934" />
+
+### Pending Leave Approvals
+<img width="1914" height="863" alt="Screenshot 2026-01-14 090043" src="https://github.com/user-attachments/assets/ba7e1625-2a29-47d1-ba5b-0e9907849b1d" />
+
+### Attendance Records
+<img width="1908" height="605" alt="Screenshot 2026-01-14 090102" src="https://github.com/user-attachments/assets/39a7c42a-b6c6-41a0-9966-57cf892c0679" />
+
+
+
+
 ---
 
